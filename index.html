@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>デジタルガチャ (1〜8)</title>
+  <title>アルファベット抽選 (A〜H)</title>
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -73,39 +73,39 @@
 <body>
 
 <div class="card">
-  <h2>数字抽選システム</h2>
-  <p style="color: #666; font-size: 14px;">1〜8の数字が重複なくランダムに出ます</p>
+  <h2>抽選システム</h2>
+  <p style="color: #666; font-size: 14px;">A〜Hのアルファベットが重複なくランダムに出ます</p>
   
   <div id="display" class="number-display">?</div>
 
-  <button class="btn-draw" onclick="draw()">数字を引く</button>
+  <button class="btn-draw" onclick="draw()">引く</button>
   <button class="btn-reset" onclick="reset()">リセット</button>
 
   <div class="history">
-    出た数字の記録
+    出た項目の記録
     <div class="history-list" id="history"></div>
   </div>
 </div>
 
 <script>
-  let numbers = [];
+  const allItems = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  let items = [];
   let drawnHistory = [];
 
   function init() {
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+    items = [...allItems];
     drawnHistory = [];
     document.getElementById('display').innerText = '?';
     renderHistory();
   }
 
   function draw() {
-    if (numbers.length === 0) {
-      alert("すべての数字を出し切りました！");
+    if (items.length === 0) {
+      alert("すべて出し切りました！");
       return;
     }
-    // ランダムに選んで配列から除去
-    const randomIndex = Math.floor(Math.random() * numbers.length);
-    const picked = numbers.splice(randomIndex, 1)[0];
+    const randomIndex = Math.floor(Math.random() * items.length);
+    const picked = items.splice(randomIndex, 1)[0];
 
     document.getElementById('display').innerText = picked;
     drawnHistory.push(picked);
@@ -115,12 +115,12 @@
   function renderHistory() {
     const historyDiv = document.getElementById('history');
     historyDiv.innerHTML = '';
-    for (let i = 1; i <= 8; i++) {
-      const item = document.createElement('div');
-      item.className = 'history-item' + (drawnHistory.includes(i) ? ' drawn' : '');
-      item.innerText = i;
-      historyDiv.appendChild(item);
-    }
+    allItems.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'history-item' + (drawnHistory.includes(item) ? ' drawn' : '');
+      div.innerText = item;
+      historyDiv.appendChild(div);
+    });
   }
 
   function reset() {
@@ -129,7 +129,6 @@
     }
   }
 
-  // 初期化実行
   init();
 </script>
 
