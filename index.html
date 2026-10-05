@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>デジタルガチャ (1〜8)</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .number-display {
+      font-size: 80px;
+      font-weight: bold;
+      color: #2c3e50;
+      height: 120px;
+      line-height: 120px;
+      margin: 20px 0;
+      background: #eef2f5;
+      border-radius: 12px;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 24px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .btn-draw { background: #3498db; color: white; }
+    .btn-draw:hover { background: #2980b9; }
+    .btn-reset { background: #e74c3c; color: white; }
+    .btn-reset:hover { background: #c0392b; }
+    .history {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+    .history-list {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .history-item {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 50%;
+      background: #ddd;
+      color: #aaa;
+      font-weight: bold;
+    }
+    .history-item.drawn {
+      background: #2ecc71;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>数字抽選システム</h2>
+  <p style="color: #666; font-size: 14px;">1〜8の数字が重複なくランダムに出ます</p>
+  
+  <div id="display" class="number-display">?</div>
+
+  <button class="btn-draw" onclick="draw()">数字を引く</button>
+  <button class="btn-reset" onclick="reset()">リセット</button>
+
+  <div class="history">
+    出た数字の記録
+    <div class="history-list" id="history"></div>
+  </div>
+</div>
+
+<script>
+  let numbers = [];
+  let drawnHistory = [];
+
+  function init() {
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+    drawnHistory = [];
+    document.getElementById('display').innerText = '?';
+    renderHistory();
+  }
+
+  function draw() {
+    if (numbers.length === 0) {
+      alert("すべての数字を出し切りました！");
+      return;
+    }
+    // ランダムに選んで配列から除去
+    const randomIndex = Math.floor(Math.random() * numbers.length);
+    const picked = numbers.splice(randomIndex, 1)[0];
+
+    document.getElementById('display').innerText = picked;
+    drawnHistory.push(picked);
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const historyDiv = document.getElementById('history');
+    historyDiv.innerHTML = '';
+    for (let i = 1; i <= 8; i++) {
+      const item = document.createElement('div');
+      item.className = 'history-item' + (drawnHistory.includes(i) ? ' drawn' : '');
+      item.innerText = i;
+      historyDiv.appendChild(item);
+    }
+  }
+
+  function reset() {
+    if (confirm("最初からやり直しますか？")) {
+      init();
+    }
+  }
+
+  // 初期化実行
+  init();
+</script>
+
+</body>
+</html>
